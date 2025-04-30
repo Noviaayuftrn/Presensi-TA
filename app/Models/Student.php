@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Student extends Model
+{
+    use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'class_id',
+        'id',
+        'foto_wajah',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function classes()
+    {
+        return $this->belongsTo(Classes::class, 'class_id');
+    }
+}

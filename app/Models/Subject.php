@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Subject extends Model
+{
+    use HasFactory;
+    protected $fillable = [
+        'major_id',
+        'nama_mapel',
+    ];
+
+    public function major()
+    {
+        return $this->belongsTo(Major::class);
+    }
+}
