@@ -17,6 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('sub_id');
             $table->integer('jumlah_hadir');
             $table->integer('jumlah_alpha');
+            $table->integer('jumlah_sakit');
+            $table->integer('jumlah_izin');
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->foreign('sub_id')->references('id')->on('subjects')->onDelete('cascade');
             $table->timestamps();

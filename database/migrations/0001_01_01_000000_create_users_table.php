@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('username', 25);
             $table->string('password', 255);
             $table->enum('role', ['admin', 'guru', 'siswa']);
-            $table->integer('nisn')->nullable();
-            $table->integer('nip')->nullable();
             $table->timestamps();
         });
 

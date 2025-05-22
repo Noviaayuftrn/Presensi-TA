@@ -13,17 +13,18 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('majors_id');        
             $table->unsignedBigInteger('class_id');
-            $table->unsignedBigInteger('sub_id');
             $table->unsignedBigInteger('teach_id');
-            $table->unsignedBigInteger('room_id');
-            $table->string('hari', 20);
+            $table->unsignedBigInteger('sub_id');
+            $table->date('date');
             $table->time('jam_mulai');
             $table->time('jam_selesai');
+            $table->enum('status', ['open', 'closed']);
+            $table->foreign('majors_id')->references('id')->on('majors')->onDelete('cascade');
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
-            $table->foreign('sub_id')->references('id')->on('subjects')->onDelete('cascade');
             $table->foreign('teach_id')->references('id')->on('teachers')->onDelete('cascade');
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
+            $table->foreign('sub_id')->references('id')->on('subjects')->onDelete('cascade');
             $table->timestamps();
         });
     }

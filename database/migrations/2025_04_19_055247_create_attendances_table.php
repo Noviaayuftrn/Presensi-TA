@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->date('attendance_date');
             $table->time('check_in_time');
-            $table->string('location', 255);
             $table->string('status', 30);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
