@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->integer('nip')->nullable();
+            $table->string('nip', 20)->nullable()->unique(); 
             $table->string('nama_guru', 255);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
