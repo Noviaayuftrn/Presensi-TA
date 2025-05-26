@@ -9,6 +9,7 @@ class Subject extends Model
     use HasFactory;
     protected $fillable = [
         'major_id',
+        'id',
         'nama_mapel',
     ];
 

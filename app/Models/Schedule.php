@@ -8,15 +8,21 @@ class Schedule extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'major_id',
         'class_id',
         'sub_id',
         'teach_id',
-        'room_id',
         'id',
-        'hari',
+        'date',
         'jam_mulai',
         'jam_selesai',
+        'status',
     ];
+
+    public function majors()
+    {
+        return $this->belongsTo(Majors::class);
+    }
 
     public function classes()
     {
@@ -32,9 +38,5 @@ class Schedule extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
-
-    public function Room()
-    {
-        return $this->belongsTo(Room::class);
-    }
+    
 }

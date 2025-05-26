@@ -11,7 +11,8 @@ class Student extends Model
         'user_id',
         'class_id',
         'id',
-        'foto_wajah',
+        'nisn',
+        'nama_siswa'
     ];
 
     public function user()

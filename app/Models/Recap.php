@@ -13,7 +13,9 @@ class Recap extends Model
         'id',
         'jumlah_hadir',
         'jumlah_alpha',
-        'student_id',
+        'jumlah_sakit',
+        'jumlah_izin',
+
     ];
 
     public function student()

@@ -12,7 +12,6 @@ class Attendance extends Model
         'id',
         'attendance_date',
         'check_in_time',
-        'location',
         'status',
     ];
 
