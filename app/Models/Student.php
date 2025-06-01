@@ -12,7 +12,6 @@ class Student extends Model
         'class_id',
         'id',
         'nisn',
-        'nama_siswa'
     ];
 
     public function user()

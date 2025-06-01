@@ -11,7 +11,6 @@ class Teacher extends Model
         'user_id',
         'id',
         'nip',
-        'nama_guru',
     ];
 
     public function user()

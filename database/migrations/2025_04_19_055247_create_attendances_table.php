@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->date('attendance_date');
             $table->time('check_in_time');
-            $table->string('status', 30);
+            $table->enum('status', ['hadir', 'sakit', 'izin', 'alpa']);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
