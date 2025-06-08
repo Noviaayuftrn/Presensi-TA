@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nip', 20)->nullable()->unique(); 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
-            $table->foreign('major_id')->references('id')->on('majors')->onDelete('cascade');
+            $table->foreign('major_id')->references('id')->on('majors')->onDelete('cascade');      
             $table->timestamps();
         });
     }
