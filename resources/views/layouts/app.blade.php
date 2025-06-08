@@ -34,9 +34,6 @@
     <div class="sidebar">
         <h4>Dashboard Admin</h4>
         <a href="{{ route('admin.dashboard') }}">🏠 Dashboard</a>
-        <!-- <a href="{{ route('admin.guru.index') }}">👨‍🏫 Guru</a> -->
-        <!-- <a href="{{ route('admin.siswa.index') }}">👩‍🎓 Siswa</a> -->
-        <!-- <a href="{{ route('admin.mapel.index') }}">📚 Mata Pelajaran</a> -->
     </div>
 
     <div class="main-content">
