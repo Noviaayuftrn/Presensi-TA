@@ -26,3 +26,4 @@
     <br>
     <a href="{{ route('major.index') }}">Kembali ke Daftar Jurusan</a>
 @endsection
+
