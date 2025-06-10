@@ -262,7 +262,7 @@
                     <form class="forms-sample" action="{{ route('major.store') }}" method="POST">
                       @csrf
                       <div class="form-group">
-                        <label for="namaguru">Nama Jurusan</label>
+                        <label for="nama_jurusan">Nama Jurusan</label>
                         <input type="text" class="form-control" placeholder="Nama" name="nama_jurusan" value="{{ old('nama_jurusan') }}">
                       </div>
                       <button type="submit" class="btn btn-primary me-2">Simpan</button>
