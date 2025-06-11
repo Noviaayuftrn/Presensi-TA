@@ -94,41 +94,41 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
   <ul class="nav">
     <li class="nav-item">
-      <a class="nav-link" href="../../index.html">
+      <a class="nav-link" href="{{ route('admin.dashboard') }}">
         <i class="icon-grid menu-icon"></i>
         <span class="menu-title">Dashboard</span>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-bs-toggle="collapse" href="basic_elements.html" aria-expanded="false" aria-controls="form-elements">
+      <a class="nav-link" href="{{ route('teacher.index') }}" aria-controls="form-elements">
         <i class="icon-briefcase menu-icon"></i>
         <span class="menu-title">Guru</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="siswa.html">
+      <a class="nav-link" href="{{ route('student.index') }}">
         <i class="icon-head menu-icon"></i>
         <span class="menu-title">Siswa</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="jurusan.html">
+      <a class="nav-link" href="{{ route('major.index') }}">
         <i class="ti-layout menu-icon"></i>
         <span class="menu-title">Jurusan</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="kelas.html">
+      <a class="nav-link" href="{{ route('class.index') }}">
         <i class="ti-blackboard menu-icon"></i>
         <span class="menu-title">Kelas</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>  
     <li class="nav-item">
-      <a class="nav-link" href="matapelajaran.html">
+      <a class="nav-link" href="{{ route('subject.index') }}">
         <i class="icon-book menu-icon"></i>
         <span class="menu-title">Mata Pelajaran</span>
           <!-- <i class="menu-arrow"></i> -->
@@ -148,6 +148,18 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Tambah Data Siswa</h4>
+
+                    @if ($errors->any())
+                        <div style="color:red;">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+
                     <form action="{{ route('student.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -161,7 +173,34 @@
                         <div class="form-group">
                           <label>Username</label>
                           <input type="text" class="form-control" name="username" placeholder="Username" value="{{ old('username') }}">
-                        </div>                        
+                        </div>      
+                        <div class="form-group">
+                          <label>Password</label>
+                          <input type="password" class="form-control" name="password" placeholder="Password" value="{{ old('nisn') }}">
+                        </div>                  
+
+                        <div class="form-group">
+                            <label for="jurusanSelect">Jurusan</label>
+                            <select class="form-select" id="major_id" name="major_id" style="color: black !important;">
+                                <option value="">Pilih Jurusan</option>
+                                @foreach ($majors as $major)
+                                      <option value="{{ $major->id }}" {{ old('major_id') == $major->id ? 'selected' : '' }}>
+                                          {{ $major->nama_jurusan ?? $major->name ?? 'Jurusan '.$major->id }}
+                                      </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="kelasSelect">Kelas</label>
+                            <select class="form-select" id="class_id" name="class_id" style="color: black !important;">
+                                <option value="">Pilih Kelas</option>
+                                @foreach ($classes as $class)
+                                    <option value="">Pilih Kelas</option>
+                                    {{-- akan diisi oleh AJAX --}}
+                                @endforeach
+                            </select>
+                        </div>
+
                       <button type="submit" class="btn btn-primary me-2">Simpan</button>
                       <a href="{{ route('student.index') }}" class="btn btn-danger" style="color: white;">Kembali</a>
                     </form>
@@ -173,6 +212,34 @@
         </div>
       </div>
     </div>
+
+    <!-- Script filter -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#major_id').change(function() {
+                var majorID = $(this).val();
+                if (majorID) {
+                    $.ajax({
+                        url: '/get-classes/' + majorID,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#class_id').empty();
+                            $('#class_id').append('<option value="">Pilih Kelas</option>');
+                            $.each(data, function(key, value) {
+                                $('#class_id').append('<option value="' + value.id + '">' + (value.nama_kelas ?? value.name ?? 'Kelas ' + value.id) + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#class_id').empty();
+                    $('#class_id').append('<option value="">Pilih Kelas</option>');
+                }
+            });
+        });
+    </script>
+
     <script src="{{asset('assets/vendors/typeahead.js/typeahead.bundle.min.js') }}"></script>
     <script src="{{asset('assets/vendors/select2/select2.min.js') }}"></script>
     <!-- End plugin js for this page -->

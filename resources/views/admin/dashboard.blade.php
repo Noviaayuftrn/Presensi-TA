@@ -103,44 +103,44 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
   <ul class="nav">
     <li class="nav-item">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="{{ route('admin.dashboard') }}">
         <i class="icon-grid menu-icon"></i>
         <span class="menu-title">Dashboard</span>
       </a>
-    </li> 
+    </li>
     <li class="nav-item">
-      <a class="nav-link" href="pages/forms/basic_elements.html">
+      <a class="nav-link" href="{{ route('teacher.index') }}" aria-controls="form-elements">
         <i class="icon-briefcase menu-icon"></i>
         <span class="menu-title">Guru</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="pages/forms/siswa.html">
+      <a class="nav-link" href="{{ route('student.index') }}">
         <i class="icon-head menu-icon"></i>
         <span class="menu-title">Siswa</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="pages/forms/jurusan.html">
+      <a class="nav-link" href="{{ route('major.index') }}">
         <i class="ti-layout menu-icon"></i>
         <span class="menu-title">Jurusan</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="pages/forms/kelas.html">
+      <a class="nav-link" href="{{ route('class.index') }}">
         <i class="ti-blackboard menu-icon"></i>
         <span class="menu-title">Kelas</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
-    </li>
+    </li>  
     <li class="nav-item">
-      <a class="nav-link" href="pages/forms/matapelajaran.html">
+      <a class="nav-link" href="{{ route('subject.index') }}">
         <i class="icon-book menu-icon"></i>
         <span class="menu-title">Mata Pelajaran</span>
-        <!-- <i class="menu-arrow"></i> -->
+          <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
   </ul>

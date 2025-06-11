@@ -101,41 +101,41 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
   <ul class="nav">
     <li class="nav-item">
-      <a class="nav-link" href="../../index.html">
+      <a class="nav-link" href="{{ route('admin.dashboard') }}">
         <i class="icon-grid menu-icon"></i>
         <span class="menu-title">Dashboard</span>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="basic_elements.html" aria-controls="form-elements">
+      <a class="nav-link" href="{{ route('teacher.index') }}" aria-controls="form-elements">
         <i class="icon-briefcase menu-icon"></i>
         <span class="menu-title">Guru</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="siswa.html">
+      <a class="nav-link" href="{{ route('student.index') }}">
         <i class="icon-head menu-icon"></i>
         <span class="menu-title">Siswa</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="jurusan.html">
+      <a class="nav-link" href="{{ route('major.index') }}">
         <i class="ti-layout menu-icon"></i>
         <span class="menu-title">Jurusan</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="kelas.html">
+      <a class="nav-link" href="{{ route('class.index') }}">
         <i class="ti-blackboard menu-icon"></i>
         <span class="menu-title">Kelas</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>  
     <li class="nav-item">
-      <a class="nav-link" href="matapelajaran.html">
+      <a class="nav-link" href="{{ route('subject.index') }}">
         <i class="icon-book menu-icon"></i>
         <span class="menu-title">Mata Pelajaran</span>
           <!-- <i class="menu-arrow"></i> -->
@@ -146,6 +146,11 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
+
+          @if(session('success'))
+                <div style="color: green;">{{ session('success') }}</div>
+            @endif
+
             <div class="row">
               <div class="col-md-6 grid-margin stretch-card">
               </div>
@@ -153,62 +158,36 @@
               </div>
               <div class="form-group">
                   <label for="jurusanSelect">Jurusan</label>
-                  <select class="form-select" id="jurusanSelect" style="color: black !important;">
-                      <option selected style="color: black !important;">Pilih Jurusan</option>
-                      <option style="color: black !important;">Desain Komunikasi Visual / Multimedia</option>
-                      <option style="color: black !important;">Teknik Ketenagalistrikan</option>
-                      <option style="color: black !important;">Teknik Mesin</option>
-                      <option style="color: black !important;">Teknik Otomotif</option>
-                      <option style="color: black !important;">Teknik Komputer Jaringan</option>
+                  <select class="form-select" id="major_filter" style="color: black !important;">
+                      <option value="">Pilih Jurusan</option>
+                      @foreach ($majors as $major)
+                            <option value="{{ $major->id }}">{{ $major->nama_jurusan ?? $major->name ?? 'Jurusan '.$major->id }}</option>
+                      @endforeach
                   </select>
               </div>
               <div class="form-group">
                   <label for="kelasSelect">Kelas</label>
-                  <select class="form-select" id="kelasSelect" style="color: black !important;">
-                      <option selected style="color: black !important;">Pilih Kelas</option>
-                      <option style="color: black !important;">X</option>
-                      <option style="color: black !important;">XI</option>
-                      <option style="color: black !important;">XII</option>
+                  <select class="form-select" id="class_filter" style="color: black !important;">
+                      <option value="">Pilih Kelas</option>
+                      @foreach ($classes as $class)
+                          <option value="{{ $class->id }}">{{ $class->nama_kelas ?? $class->name ?? 'Kelas '.$class->id }}</option>
+                      @endforeach
                   </select>
               </div>
               <a href="{{ route('student.create') }}" class="btn btn-primary mb-3">Tambah Siswa</a>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 20%;">Nama Siswa</th>
                             <th style="width: 10%;">NISN</th>
-                            <th style="width: 20%;">Usn</th>
+                            <th style="width: 20%;">Nama Siswa</th>
+                            <th style="width: 10%;">Username</th>
+                            <th style="width: 20%;">Jurusan</th>
+                            <th style="width: 20%;">Kelas</th>
                             <th style="width: 10%;">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @forelse($students as $index => $student)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $student->user->nama }}</td>
-                                <td>{{ $student->nisn }}</td>
-                                <td>{{ $student->user->username }}</td>
-                                <td>
-                                    <a href="{{ route('student.edit', $student->id) }}" class="btn btn-sm btn-warning me-1"
-                                        title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form action="{{ route('student.destroy', $student->id) }}" method="POST"
-                                        style="display:inline;" onsubmit="return confirm('Yakin ingin hapus?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger" title="Hapus">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center">Belum ada data siswa yang ditambahkan.</td>
-                            </tr>
-                        @endforelse
+                    <tbody id="student-table-body">
+                        @include('student.partials.student_table', ['students' => $students])
                     </tbody>
                 </table>
             </div>
@@ -221,6 +200,47 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
+
+    {{-- Script untuk dropdown filter --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            // Fungsi untuk load kelas berdasarkan jurusan
+            function loadClasses(majorID) {
+                if (majorID) {
+                    $.ajax({
+                        url: '/get-classes/' + majorID,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#class_filter').empty();
+                            $('#class_filter').append('<option value="">Pilih Kelas</option>');
+                            $.each(data, function(key, value) {
+                                $('#class_filter').append('<option value="' + value.id + '">' + (value.nama_kelas ?? value.name ?? 'Kelas ' + value.id) + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#class_filter').empty();
+                    $('#class_filter').append('<option value="">Semua Kelas</option>');
+                }
+            }
+
+            // Saat jurusan diubah
+            $('#major_filter').change(function() {
+                var majorID = $(this).val();
+                loadClasses(majorID);
+
+                // Opsional: bisa tambahkan filter table disini kalau mau filter daftar guru secara live
+                // misalnya pakai AJAX atau Javascript DOM filter
+            });
+
+            // Jika mau, bisa tambahkan event change pada #class_filter untuk filter table
+
+        });
+    </script>
+
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
@@ -241,5 +261,9 @@
     <script src="assets/js/select2.js"></script>
     <!-- End custom js for this page-->
     <script src="assets/js/sidebar.js"></script>
+    <!--Script filter-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/js/student-filter.js') }}"></script>
+
   </body>
 </html>

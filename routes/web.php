@@ -24,10 +24,13 @@ Route::get('/get-classesstudent/{major_id}', [StudentController::class, 'getClas
 Route::get('/filter-students', [StudentController::class, 'filterstudent'])->name('student.filterstudent');
 Route::resource('teacher', TeacherController::class);
 Route::get('/get-classes/{major_id}', [TeacherController::class, 'getClassesByMajor'])->name('teacher.getClassesByMajor');
+Route::get('/get-subjects/{major_id}', [TeacherController::class, 'getSubjectsByMajorClass'])->name('teacher.getClassesByMajorClass');
 Route::get('/filter-teachers', [TeacherController::class, 'filter'])->name('teacher.filter');
 Route::resource('major', MajorController::class);
 Route::resource('class', ClassController::class);
 Route::resource('subject', SubjectController::class);
+Route::get('/get-classes/{major_id}', [SubjectController::class, 'getClassesByMajorSub'])->name('subject.getClassesByMajorSub');
+Route::get('/filter-subjects', [SubjectController::class, 'filterSub'])->name('subject.filterSub');
 Route::resource('schedule', ScheduleController::class);
 
 Route::get('/attendance/create', [AttendanceController::class, 'showForm'])->name('attendances.create');

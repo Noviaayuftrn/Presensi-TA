@@ -14,6 +14,7 @@ class Teacher extends Model
         'major_id',
         'id',
         'nip',
+        'sub_id',
     ];
 
     public function user()
@@ -26,7 +27,7 @@ class Teacher extends Model
     return $this->hasMany(Schedule::class);
     }
 
-     public function class()
+    public function class()
     {
         return $this->belongsTo(Classes::class); // model kamu: Classes
     }
@@ -35,4 +36,10 @@ class Teacher extends Model
     {
         return $this->belongsTo(Major::class);
     }
+
+    public function subject()
+    {
+        return $this->belongsTo(subject::class);
+    }
 }
+

@@ -92,46 +92,46 @@
       <div class="container-fluid page-body-wrapper">
         <!-- partial:../../partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-  <ul class="nav">
-    <li class="nav-item">
-      <a class="nav-link" href="../../index.html">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">Dashboard</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-bs-toggle="collapse" href="basic_elements.html" aria-expanded="false" aria-controls="form-elements">
-        <i class="icon-briefcase menu-icon"></i>
-        <span class="menu-title">Guru</span>
-        <!-- <i class="menu-arrow"></i> -->
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="siswa.html">
-        <i class="icon-head menu-icon"></i>
-        <span class="menu-title">Siswa</span>
-        <!-- <i class="menu-arrow"></i> -->
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="jurusan.html">
-        <i class="ti-layout menu-icon"></i>
-        <span class="menu-title">Jurusan</span>
-        <!-- <i class="menu-arrow"></i> -->
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="kelas.html">
-        <i class="ti-blackboard menu-icon"></i>
-        <span class="menu-title">Kelas</span>
-        <!-- <i class="menu-arrow"></i> -->
-      </a>
-    </li>  
-    <li class="nav-item">
-      <a class="nav-link" href="matapelajaran.html">
-        <i class="icon-book menu-icon"></i>
-        <span class="menu-title">Mata Pelajaran</span>
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+          <i class="icon-grid menu-icon"></i>
+          <span class="menu-title">Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('teacher.index') }}" aria-controls="form-elements">
+          <i class="icon-briefcase menu-icon"></i>
+          <span class="menu-title">Guru</span>
           <!-- <i class="menu-arrow"></i> -->
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('student.index') }}">
+          <i class="icon-head menu-icon"></i>
+          <span class="menu-title">Siswa</span>
+          <!-- <i class="menu-arrow"></i> -->
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('major.index') }}">
+          <i class="ti-layout menu-icon"></i>
+          <span class="menu-title">Jurusan</span>
+          <!-- <i class="menu-arrow"></i> -->
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('class.index') }}">
+          <i class="ti-blackboard menu-icon"></i>
+          <span class="menu-title">Kelas</span>
+          <!-- <i class="menu-arrow"></i> -->
+        </a>
+      </li>  
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('subject.index') }}">
+          <i class="icon-book menu-icon"></i>
+          <span class="menu-title">Mata Pelajaran</span>
+            <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
   </ul>
@@ -150,18 +150,39 @@
                     <form action="{{ route('subject.store') }}" method="POST">
                       @csrf
                         <h4 class="card-title">Tambah Data Mapel</h4>
+
+                        @if ($errors->any())
+                            <div style="color:red;">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                           <div class="form-group">
                             <label>Tambah Mata Pelajaran</label>
                             <input type="text" class="form-control" name="nama_mapel" placeholder="Nama Mapel" value="{{ old('nama_mapel') }}">
                           </div>
                           <div class="form-group">
-                              <label>Jurusan</label>
-                              <select class="form-select" name="major_id" style="color: black !important;">
-                                  <option selected style="color: black !important;">Pilih Jurusan</option>
+                              <label for="jurusanSelect">Jurusan</label>
+                              <select class="form-select" id="major_id" name="major_id" style="color: black !important;">
+                                  <option value="">Pilih Jurusan</option>
                                   @foreach ($majors as $major)
-                                      <option value="{{ $major->id }}" {{ old('major_id') == $major->id ? 'selected' : '' }}>
-                                          {{ $major->nama_jurusan }}
-                                      </option>
+                                        <option value="{{ $major->id }}" {{ old('major_id') == $major->id ? 'selected' : '' }}>
+                                            {{ $major->nama_jurusan ?? $major->name ?? 'Jurusan '.$major->id }}
+                                        </option>
+                                  @endforeach
+                              </select>
+                          </div>
+                          <div class="form-group">
+                              <label for="kelasSelect">Kelas</label>
+                              <select class="form-select" id="class_id" name="class_id" style="color: black !important;">
+                                  <option value="">Pilih Kelas</option>
+                                  @foreach ($classes as $class)
+                                      <option value="">Pilih Kelas</option>
+                                      {{-- akan diisi oleh AJAX --}}
                                   @endforeach
                               </select>
                           </div>
@@ -181,6 +202,35 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
+
+     <!-- Script filter -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#major_id').change(function() {
+                var majorID = $(this).val();
+                if (majorID) {
+                    $.ajax({
+                        url: '/get-classes/' + majorID,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#class_id').empty();
+                            $('#class_id').append('<option value="">Pilih Kelas</option>');
+                            $.each(data, function(key, value) {
+                                $('#class_id').append('<option value="' + value.id + '">' + (value.nama_kelas ?? value.name ?? 'Kelas ' + value.id) + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#class_id').empty();
+                    $('#class_id').append('<option value="">Pilih Kelas</option>');
+                }
+            });
+        });
+    </script>
+
+
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="{{asset('assets/vendors/typeahead.js/typeahead.bundle.min.js') }}"></script>

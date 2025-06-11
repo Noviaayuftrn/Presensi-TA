@@ -36,6 +36,7 @@
                 <th>Nama User</th>
                 <th>Jurusan</th>
                 <th>Kelas</th>
+                <th>Mata Pelajaran</th>
                 <th>Aksi</th>
             </tr>
         </thead>

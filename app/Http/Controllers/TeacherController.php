@@ -8,21 +8,24 @@ use App\Models\User;
 use App\Models\Teacher;
 use App\Models\Classes;
 use App\Models\Major;
+use App\Models\Subject;
 
 class TeacherController extends Controller
 {
     public function index()
     {
         $teachers = Teacher::with('user', 'class', 'major')->get();
-        $majors = \App\Models\Major::all();
-        $classes = \App\Models\Classes::all();
-        return view('teacher.index', compact('teachers', 'majors', 'classes'));
+        $majors = Major::all();
+        $classes = Classes::all();
+        $subjects = Subject::all();
+        return view('teacher.index', compact('teachers', 'majors', 'classes', 'subjects'));
     }
 
     public function create()
     {
-        $classes = \App\Models\Classes::all();
-        $majors = \App\Models\Major::all();
+        $classes = Classes::all();
+        $majors = Major::all();
+        $subjects = Subject::all();
         return view('teacher.create', compact('classes', 'majors'));
     }
 
@@ -35,6 +38,7 @@ class TeacherController extends Controller
             'nip' => 'required|numeric|unique:teachers',
             'class_id' => 'required|exists:classes,id',
             'major_id' => 'required|exists:majors,id',
+            'sub_id' => 'required|exists:subjects,id', 
         ]);
 
         $user = User::create([
@@ -49,6 +53,7 @@ class TeacherController extends Controller
             'nip' => $request->nip,
             'class_id' => $request->class_id,
             'major_id' => $request->major_id,
+            'sub_id' => $request->sub_id,
         ]);
 
         return redirect()->route('teacher.index')->with('success', 'Data guru berhasil ditambahkan');
@@ -57,9 +62,10 @@ class TeacherController extends Controller
     public function edit(Teacher $teacher)
     {
         $teacher->load('user');
-        $classes = \App\Models\Classes::all();
-        $majors = \App\Models\Major::all();
-        return view('teacher.edit', compact('teacher', 'classes', 'majors'));
+        $classes = Classes::all();
+        $majors = Major::all();
+        $subjects = Subject::all();
+        return view('teacher.edit', compact('teacher', 'classes', 'majors', 'subjects'));
     }
 
     public function update(Request $request, Teacher $teacher)
@@ -70,6 +76,7 @@ class TeacherController extends Controller
             'nip' => 'required|numeric|unique:teachers,nip,' . $teacher->id,
             'class_id' => 'required|exists:classes,id',
             'major_id' => 'required|exists:majors,id',
+            'sub_id' => 'required|exists:subjects,id',
         ]);
 
         $teacher->user->update([
@@ -81,6 +88,7 @@ class TeacherController extends Controller
             'nip' => $request->nip,
             'class_id' => $request->class_id,
             'major_id' => $request->major_id,
+            'sub_id' => $request->sub_id,
         ]);
 
         return redirect()->route('teacher.index')->with('success', 'Data guru berhasil diperbarui');
@@ -98,6 +106,12 @@ class TeacherController extends Controller
         $classes = \App\Models\Classes::where('major_id', $major_id)->get();
 
         return response()->json($classes);
+    }
+
+    public function getSubjectsByMajorClass($major_id)
+    {
+        $subjects = \App\Models\Subject::where('major_id', $major_id)->get();
+        return response()->json($subjects);
     }
 
     // filter dropdown untuk index guru
@@ -118,6 +132,5 @@ class TeacherController extends Controller
         // Return HTML partial (view yang hanya berisi <tbody> tabel)
         return view('teacher.partials.teacher_table', compact('teachers'))->render();
     }
-
-
 }
+

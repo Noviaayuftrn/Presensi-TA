@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('major_id');
+            $table->unsignedBigInteger('class_id');
             $table->string('nama_mapel', 30);
             $table->foreign('major_id')->references('id')->on('majors')->onDelete('cascade');
+            $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,3 +30,4 @@ return new class extends Migration
         Schema::dropIfExists('subjects');
     }
 };
+
