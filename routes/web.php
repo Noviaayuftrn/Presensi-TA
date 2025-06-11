@@ -20,7 +20,11 @@ Route::get('/', [DashboardAdminController::class, 'index'])->name('admin.dashboa
 //     Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard');
 
 Route::resource('student', StudentController::class);
+Route::get('/get-classesstudent/{major_id}', [StudentController::class, 'getClassesByMajorstudent'])->name('student.getClassesByMajorstudent');
+Route::get('/filter-students', [StudentController::class, 'filterstudent'])->name('student.filterstudent');
 Route::resource('teacher', TeacherController::class);
+Route::get('/get-classes/{major_id}', [TeacherController::class, 'getClassesByMajor'])->name('teacher.getClassesByMajor');
+Route::get('/filter-teachers', [TeacherController::class, 'filter'])->name('teacher.filter');
 Route::resource('major', MajorController::class);
 Route::resource('class', ClassController::class);
 Route::resource('subject', SubjectController::class);

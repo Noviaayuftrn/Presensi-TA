@@ -25,4 +25,14 @@ class Teacher extends Model
     {
     return $this->hasMany(Schedule::class);
     }
+
+     public function class()
+    {
+        return $this->belongsTo(Classes::class); // model kamu: Classes
+    }
+
+    public function major()
+    {
+        return $this->belongsTo(Major::class);
+    }
 }

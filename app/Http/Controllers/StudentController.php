@@ -7,19 +7,23 @@ use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Classes;
+use App\Models\Major;
 
 class StudentController extends Controller
 {
    public function index()
     {
-        $students = Student::with(['user', 'class'])->get();
-        return view('student.index', compact('students'));
+        $students = Student::with(['user', 'class', 'major'])->get();
+        $majors = \App\Models\Major::all();
+        $classes = \App\Models\Classes::all();
+        return view('student.index', compact('students', 'majors', 'classes'));
     }
 
     public function create()
     {
-        $classes = Classes::all(); // Mengambil semua kelas yang ada
-        return view('student.create', compact('classes'));
+        $classes = \App\Models\Classes::all();
+        $majors = \App\Models\Major::all();
+        return view('student.create', compact('classes', 'majors'));
     }
 
     public function store(Request $request)
@@ -28,7 +32,8 @@ class StudentController extends Controller
             'nama' => 'required',
             'username' => 'required|unique:users',
             'password' => 'required|min:6',
-            'class_id' => 'required',
+            'class_id' => 'required|exists:classes,id',
+            'major_id' => 'required|exists:majors,id',
             'nisn' => 'required|numeric|unique:students',
         ]);
 
@@ -42,6 +47,7 @@ class StudentController extends Controller
         Student::create([
             'user_id' => $user->id,
             'class_id' => $request->class_id,
+            'major_id' => $request->major_id,
             'nisn' => $request->nisn,
         ]);
 
@@ -50,9 +56,10 @@ class StudentController extends Controller
 
     public function edit(Student $student)
     {
-        $classes = Classes::all();
+        $classes = \App\Models\Classes::all();
+        $majors = \App\Models\Major::all();
         $student->load('user');
-        return view('student.edit', compact('student', 'classes'));
+        return view('student.edit', compact('student', 'classes', 'majors'));
     }
 
     public function update(Request $request, Student $student)
@@ -60,7 +67,8 @@ class StudentController extends Controller
         $request->validate([
             'nama' => 'required',
             'username' => 'required|unique:users,username,' . $student->user_id,
-            'class_id' => 'required',
+            'class_id' => 'required|exists:classes,id',
+            'major_id' => 'required|exists:majors,id',
             'nisn' => 'required|numeric|unique:students,nisn,' . $student->id,
         ]);
 
@@ -71,6 +79,7 @@ class StudentController extends Controller
 
         $student->update([
             'class_id' => $request->class_id,
+            'major_id' => $request->major_id,
             'nisn' => $request->nisn,
         ]);
 
@@ -82,4 +91,32 @@ class StudentController extends Controller
         $student->user->delete(); // akan otomatis menghapus student karena foreign key cascade
         return redirect()->route('student.index')->with('success', 'Data siswa berhasil dihapus');
     } 
+
+    // filter dropdown create student
+    public function getClassesByMajorstudent($major_id)
+    {
+        $classes = \App\Models\Classes::where('major_id', $major_id)->get();
+
+        return response()->json($classes);
+    }
+
+    // filter dropdown untuk index student
+    public function filterstudent(Request $request)
+    {
+        $query = Student::with('user', 'class', 'major');
+
+        if ($request->major_id) {
+            $query->where('major_id', $request->major_id);
+        }
+
+        if ($request->class_id) {
+            $query->where('class_id', $request->class_id);
+        }
+
+        $students = $query->get();
+
+        // Return HTML partial (view yang hanya berisi <tbody> tabel)
+        return view('student.partials.student_table', compact('students'))->render();
+    }
 }
+

@@ -25,4 +25,9 @@ class Student extends Model
     {
         return $this->belongsTo(Classes::class, 'class_id');
     }
+
+    public function major()
+    {
+        return $this->belongsTo(Major::class);
+    }
 }
