@@ -1,5 +1,6 @@
 @forelse($students as $index => $student)
                             <tr>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $student->nisn }}</td>
                                 <td>{{ $student->user->nama }}</td>
                                 <td>{{ $student->user->username }}</td>
@@ -25,3 +26,4 @@
                                 <td colspan="5" class="text-center">Belum ada data siswa yang ditambahkan.</td>
                             </tr>
                         @endforelse
+                        

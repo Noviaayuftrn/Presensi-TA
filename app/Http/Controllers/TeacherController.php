@@ -14,7 +14,7 @@ class TeacherController extends Controller
 {
     public function index()
     {
-        $teachers = Teacher::with('user', 'class', 'major')->get();
+        $teachers = Teacher::with('user', 'class', 'major', 'subject')->get();
         $majors = Major::all();
         $classes = Classes::all();
         $subjects = Subject::all();
@@ -26,7 +26,7 @@ class TeacherController extends Controller
         $classes = Classes::all();
         $majors = Major::all();
         $subjects = Subject::all();
-        return view('teacher.create', compact('classes', 'majors'));
+        return view('teacher.create', compact('classes', 'majors', 'subjects'));
     }
 
     public function store(Request $request)
@@ -92,6 +92,15 @@ class TeacherController extends Controller
         ]);
 
         return redirect()->route('teacher.index')->with('success', 'Data guru berhasil diperbarui');
+    }
+
+    public function show(Teacher $teacher)
+    {
+        $teacher->load('user', 'class', 'major', 'subject');
+        $classes = Classes::all();
+        $majors = Major::all();
+        $subjects = Subject::all();
+        return view('teacher.show', compact('teacher', 'majors', 'subjects', 'classes'));
     }
 
     public function destroy(Teacher $teacher)

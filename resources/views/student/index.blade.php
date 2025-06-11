@@ -27,8 +27,8 @@
       <!-- partial:../../partials/_navbar.html -->
       <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
   <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-    <a class="navbar-brand brand-logo me-5" href="index.html"><img src="assets/images/logoypt.png" class="me-2" alt="logo" /></a>
-    <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/ypt.png" alt="logo" /></a>
+    <a class="navbar-brand brand-logo me-5" href="{{ route('admin.dashboard') }}"><img src="{{asset('assets/images/logoypt.png') }}" class="me-2" alt="logo" /></a>
+    <a class="navbar-brand brand-logo-mini" href="{{ route('admin.dashboard') }}"><img src="{{asset('assets/images/ypt.png') }}" alt="logo" /></a>
   </div>
   <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
     <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -147,8 +147,8 @@
         <div class="main-panel">
           <div class="content-wrapper">
 
-          @if(session('success'))
-                <div style="color: green;">{{ session('success') }}</div>
+            @if(session('success'))
+              <div style="color: green;">{{ session('success') }}</div>
             @endif
 
             <div class="row">
@@ -178,11 +178,12 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th style="width: 3%;">No.</th>
                             <th style="width: 10%;">NISN</th>
                             <th style="width: 20%;">Nama Siswa</th>
-                            <th style="width: 10%;">Username</th>
-                            <th style="width: 20%;">Jurusan</th>
-                            <th style="width: 20%;">Kelas</th>
+                            <th style="width: 20%;">Username</th>
+                            <th style="width: 15%;">Jurusan</th>
+                            <th style="width: 10%;">Kelas</th>
                             <th style="width: 10%;">Aksi</th>
                         </tr>
                     </thead>

@@ -29,7 +29,7 @@ class Teacher extends Model
 
     public function class()
     {
-        return $this->belongsTo(Classes::class); // model kamu: Classes
+        return $this->belongsTo(Classes::class); 
     }
 
     public function major()
@@ -39,7 +39,7 @@ class Teacher extends Model
 
     public function subject()
     {
-        return $this->belongsTo(subject::class);
+        return $this->belongsTo(Subject::class, 'sub_id');
     }
 }
 
