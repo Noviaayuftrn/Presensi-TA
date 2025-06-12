@@ -236,9 +236,7 @@
                 // Opsional: bisa tambahkan filter table disini kalau mau filter daftar guru secara live
                 // misalnya pakai AJAX atau Javascript DOM filter
             });
-
             // Jika mau, bisa tambahkan event change pada #class_filter untuk filter table
-
         });
     </script>
 

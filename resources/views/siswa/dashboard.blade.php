@@ -118,9 +118,9 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('teacher.index') }}" aria-controls="form-elements">
+      <a class="nav-link" href="{{ route('attendance.guru_index') }}" aria-controls="form-elements">
         <i class="icon-briefcase menu-icon"></i>
-        <span class="menu-title">Guru</span>
+        <span class="menu-title">hadir</span>
         <!-- <i class="menu-arrow"></i> -->
       </a>
     </li>
@@ -178,21 +178,21 @@
               <div class="card card-tale" style="width: 150px; height: 150px;">
                 <div class="card-body text-center">
                   <p class="mb-4" style="font-size: 16px;">Total Guru</p>
-                  <p class="fs-30 mb-2">{{ $totalGuru }}</p>
+                  <p class="fs-30 mb-2">{{ $totalAlpa }}</p>
                 </div>
               </div>
             
               <div class="card card-dark-blue" style="width: 150px; height: 150px;">
                 <div class="card-body text-center">
                   <p class="mb-4" style="font-size: 16px;">Total Siswa</p>
-                  <p class="fs-30 mb-2">{{ $totalSiswa }}</p>
+                  <p class="fs-30 mb-2">{{ $totalSakit }}</p>
                 </div>
               </div>
             
               <div class="card card-light-blue" style="width: 150px; height: 150px;">
                 <div class="card-body text-center">
                   <p class="mb-4" style="font-size: 16px;">Total Mapel</p>
-                  <p class="fs-30 mb-2">{{ $totalMapel }}</p>
+                  <p class="fs-30 mb-2">{{ $totalIzin }}</p>
                 </div>
               </div>
             </div>

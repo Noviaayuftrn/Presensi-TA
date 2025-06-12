@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->date('attendance_date');
-            $table->time('check_in_time');
+            $table->unsignedBigInteger('schedule_id');
             $table->enum('status', ['hadir', 'sakit', 'izin', 'alpa']);
+            
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');
             $table->timestamps();
         });
     }

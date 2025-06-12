@@ -18,4 +18,14 @@ class Classes extends Model
     {
         return $this->belongsTo(Major::class);
     }
+
+    public function teachers() 
+    {
+    return $this->belongsToMany(Teacher::class, 'class_teacher', 'class_id', 'teacher_id'); // Atau hasMany jika 1 kelas 1 guru
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'class_id');
+    }
 }

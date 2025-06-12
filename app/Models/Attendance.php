@@ -11,13 +11,23 @@ class Attendance extends Model
     protected $fillable = [
         'user_id',
         'id',
-        'attendance_date',
-        'check_in_time',
+        'schedule_id',
         'status',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function schedule() 
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+
+    public function student()
+{
+    return $this->belongsTo(Student::class, 'user_id', 'user_id');
+}
+
 }

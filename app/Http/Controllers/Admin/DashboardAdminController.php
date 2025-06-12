@@ -16,4 +16,18 @@ class DashboardAdminController extends Controller
 
         return view('admin.dashboard', compact('totalGuru', 'totalSiswa', 'totalMapel'));
     }
+
+    public function dashboardGuru() : View
+    {
+        return view('guru.dashboard');
+    }
+
+    public function dashboardSiswa() : View
+    {
+        $totalAlpa = 10; // Ganti dengan logika untuk menghitung total guru
+        $totalSakit = 120; // Ganti dengan logika untuk menghitung total siswa
+        $totalIzin = 8; // Ganti dengan logika untuk menghitung total mata pelajaran
+
+        return view('siswa.dashboard', compact('totalAlpa', 'totalSakit', 'totalIzin'));
+    }
 }

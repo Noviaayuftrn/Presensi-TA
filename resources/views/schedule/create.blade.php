@@ -2,6 +2,48 @@
 
 @section('content')
     <h1>Buka Presensi Baru</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Mata Pelajaran</th>
+                <th>Kelas</th>
+                <th>Tanggal</th>
+                <th>Jam</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($schedules as $i => $schedule)
+                <tr>
+                    <td>{{ $i + 1 }}</td>
+                    <td>{{ $schedule->subject->nama_mapel }}</td>
+                    <td>{{ $schedule->class->nama_kelas }}</td>
+                    <td>{{ \Carbon\Carbon::parse($schedule->date)->format('d-m-Y') }}</td>
+                    <td>{{ $schedule->jam_mulai }} - {{ $schedule->jam_selesai }}</td>
+                    <td>
+                        @if ($schedule->status == 'open')
+                            <span class="badge bg-success">Dibuka</span>
+                        @else
+                            <span class="badge bg-secondary">Belum Dibuka</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if ($schedule->status == 'open')
+                            <span class="text-muted">Sedang Aktif</span>
+                        @else
+                            <form action="{{ route('schedule.open') }}" method="POST" style="display:inline;">
+                                @csrf
+                                <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Buka Presensi</button>
+                            </form>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 
     @if ($errors->any())
         <div style="color: red;">
@@ -44,7 +86,7 @@
         <select name="teach_id">
             <option value="">-- Pilih Guru --</option>
             @foreach ($teachers as $teacher)
-                <option value="{{ $teacher->id }}">{{ $teacher->nama_guru }}</option>
+                <option value="{{ $teacher->id }}">{{ $teacher->user->nama }}</option>
             @endforeach
         </select><br><br>
 
@@ -67,5 +109,6 @@
     </form>
 
     <br>
-    <a href="{{ route('schedule.index') }}">Kembali ke Jadwal</a>
+    <a href="{{ route('attendance.guru_index') }}">Kembali ke Jadwal</a>
 @endsection
+

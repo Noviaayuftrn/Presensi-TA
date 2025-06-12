@@ -13,11 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Jalankan hanya seeder yang sesuai dengan struktur tabel users Anda
+        $this->call([
+            AdminSeeder::class,
         ]);
     }
 }

@@ -20,24 +20,33 @@ class Schedule extends Model
         'status',
     ];
 
-    public function majors()
+    public function major()
     {
         return $this->belongsTo(Majors::class);
     }
 
     public function class()
     {
-        return $this->belongsTo(Classes::class);
+        return $this->belongsTo(Classes::class, 'class_id');
     }
     
     public function subject()
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsTo(Subject::class, 'sub_id');
     }
 
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class);
+        return $this->belongsTo(Teacher::class, 'teach_id');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
     }
     
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'attendances')->withPivot('status', 'attendance_date', 'check_in_time');
+    }
 }

@@ -186,11 +186,16 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-            <div class="row">
-              <div class="form-group">
-              </div>
-              <h4 class="mb-3">Catatan Kehadiran</h4>
 
+          @if (session('success'))
+               <div style="color: green;">{{ session('success') }}</div>
+           @endif
+
+            <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+              </div>
               <div class="form-group">
                   <label for="jurusanSelect">Jurusan</label>
                   <select class="form-select" id="major_filter" style="color: black !important;">
@@ -218,86 +223,32 @@
                       @endforeach
                   </select>
               </div>
-
+              <a href="{{ route('schedule.create') }}" class="btn btn-primary mb-3">Buka Kelas</a>
               <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th style="width: 10%;">No</th>
-                    <th style="width: 50%;">Nama</th>
-                    <th style="width: 20%;">Kelas</th>
-                    <th style="width: 20%;">Tanggal</th>
-                    <th style="width: 40%;">Status Kehadiran</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @foreach($attendances as $index => $attendance)
-                  <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $attendance->user->nama }}</td>
-                    <td>{{ $attendance->schedule->class->nama_kelas ?? '-' }}</td>
-                    <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
-                    <td>
-                        <span class="badge 
-                            @if($attendance->status == 'hadir') bg-success
-                            @elseif($attendance->status == 'sakit') bg-warning
-                            @elseif($attendance->status == 'izin') bg-info
-                            @else bg-danger @endif">
-                            {{ ucfirst($attendance->status) }}
-                        </span>
-                    </td>
-                  </tr>
-                  @endforeach
-                </tbody>
+                  <thead>
+                      <tr>
+                          <th style="width: 10%;">No</th>
+                          <th style="width: 50%;">Nama</th>
+                          <th style="width: 40%;">Keterangan</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    @foreach($openedSchedule->attendances as $index => $attendance)
+                      <tr>
+                          <td>{{ $index + 1 }}</td>
+                          <td>{{ $attendance->user->nama ?? '-' }}</td>
+                          <td>
+                              <select class="form-control status-dropdown" data-id="{{ $attendance->id }}" style="color: black !important;">
+                                  <option value="hadir"{{ $attendance->status == 'hadir' ? 'selected' : '' }} style="color: black !important;" >Hadir</option>
+                                  <option value="alpa" {{ $attendance->status == 'alpa' ? 'selected' : '' }} style="color: black !important;">Alpa</option>
+                                  <option value="sakit" {{ $attendance->status == 'sakit' ? 'selected' : '' }} style="color: black !important;">Sakit</option>
+                                  <option value="izin" {{ $attendance->status == 'izin' ? 'selected' : '' }} style="color: black !important;">Izin</option>
+                              </select>
+                          </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
               </table>
-              <!-- <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Tambah Data Guru</h4>
-                    <p class="card-description"> Basic form elements </p>
-                    <form class="forms-sample">
-                      <div class="form-group">
-                        <label for="nip">NIP</label>
-                        <input type="text" class="form-control" id="nip" placeholder="NIP">
-                      </div>
-                      <div class="form-group">
-                        <label for="namaguru">Nama Guru</label>
-                        <input type="text" class="form-control" id="namaguru" placeholder="Nama">
-                      </div>
-                      <div class="form-group">
-                        <label for="pilihjurusan">Jurusan</label>
-                        <select class="form-select" id="pilihjurusan">
-                          <option selected disabled>Pilih Jurusan</option>
-                          <option style="color: black;">Desain Komunikasi Visual / Multimedia</option>
-                          <option style="color: black;">Teknik Ketenagalistrikan</option>
-                          <option style="color: black;">Teknik Mesin</option>
-                          <option style="color: black;">Teknik Otomotif</option>
-                          <option style="color: black;">Teknik Komputer Jaringan</option>        
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="pilihkelas">Kelas</label>
-                        <select class="form-select" id="pilihkelas">
-                          <option selected disabled>Pilih Kelas</option>
-                          <option style="color: black;">X</option>
-                          <option style="color: black;">XI</option>
-                          <option style="color: black;">XII</option>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="pilihmapel">Mata Pelajaran</label>
-                        <select class="form-select" id="pilihmapel">
-                          <option selected disabled>Pilih Mapel</option>
-                          <option style="color: black;">Mapel1</option>
-                          <option style="color: black;">Mapel2</option>
-                          <option style="color: black;">Mapel3</option>
-                        </select>
-                      </div>
-                      <button type="submit" class="btn btn-primary me-2">Simpan</button>
-                      <button class="btn btn-danger" style="color: white;">Kembali</button>
-                    </form>
-                  </div>
-                </div>
-              </div> -->
             </div>
           </div>
           <!-- content-wrapper ends -->
@@ -309,6 +260,37 @@
       <!-- page-body-wrapper ends -->
     </div>
 
+    // Script to handle the status update status kehadiran 
+    <script>
+        document.querySelectorAll('.status-dropdown').forEach(function(select) {
+            select.addEventListener('change', function() {
+                const attendanceId = this.getAttribute('data-id');
+                const status = this.value;
+
+                fetch(`/guru/attendance/update-status/${attendanceId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ status: status })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        console.log('Status updated successfully');
+                    } else {
+                        alert('Gagal update status');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+        // Script to handle the filter major, class, and subject
         {{-- Script untuk dropdown filter --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -362,6 +344,7 @@
             // Jika ingin, tambahkan filter ke tabel saat #class_filter atau #subject_filter berubah
         });
     </script>
+
 
 
     <!-- container-scroller -->

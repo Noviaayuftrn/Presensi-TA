@@ -2,43 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Presensi Online</title>
+    <title>@yield('title', 'Presensi Guru')</title>
+    
+    <!-- ✅ Tambah Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #343a40;
-            height: 100vh;
-            color: white;
-            padding: 20px;
-        }
-        .sidebar a {
-            color: white;
-            display: block;
-            padding: 10px 0;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #495057;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-        }
-    </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h4>Dashboard Admin</h4>
-        <a href="{{ route('admin.dashboard') }}">🏠 Dashboard</a>
-    </div>
-
-    <div class="main-content">
-        <h2 class="mb-4">Presensi Online</h2>
+    <div class="container mt-4">
         @yield('content')
     </div>
+
+    <!-- ✅ Tambah JS Bootstrap dan jQuery jika pakai dropdown/JS lainnya -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    @yield('scripts')
 </body>
 </html>
